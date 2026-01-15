@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Login</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
+  <style>
+    .login-wrap{max-width:420px;margin:48px auto;padding:36px;border-radius:12px;background:rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+    .login-wrap h2{text-align:center;margin:0 0 18px;font-size:32px}
+    .login-row{display:block;margin-bottom:12px}
+    input.login-input{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
+    .login-actions{display:flex;gap:12px;align-items:center;margin-top:12px}
+    .btn-primary{width:100%;padding:12px;border-radius:8px;background:#fff;color:#111;font-weight:700;border:0}
+    .btn-google{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;border:1px solid rgba(255,255,255,0.06)}
+    .btn-github{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;border:1px solid rgba(255,255,255,0.06)}
+    .btn-github img{border-radius:50%;display:inline-block}
+    .socials{display:flex;gap:10px;justify-content:center;flex:1;flex-wrap:wrap}
+    .socials button{min-width:160px}
+    @media(max-width:420px){
+      .socials button{width:100%;min-width:0}
+    }
+    .login-submit{margin-top:12px}
+    .forgot{display:block;text-align:center;margin-top:12px;color:#cbd5e1}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="login-wrap">
+      <h2>LOGIN</h2>
+
+      {% if messages %}
+        {% for m in messages %}
+          <div class="message {{ m.tags }}">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="login-row">
+          <input class="login-input" name="username" placeholder="Username" required>
+        </div>
+        <div class="login-row">
+          <input class="login-input" name="password" type="password" placeholder="Password" required>
+        </div>
+
+        <div class="login-actions">
+          <div class="socials">
+            <button class="btn-github" type="button" onclick="window.location='#'">
+              <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GH" style="width:18px;height:18px"> Continue with GitHub
+            </button>
+            <button class="btn-google" type="button" onclick="window.location='#'">
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G" style="width:20px;height:20px"> Continue with Google
+            </button>
+          </div>
+        </div>
+        <div class="login-actions login-submit">
+          <button class="btn-primary" type="submit">LOGIN</button>
+        </div>
+      </form>
+
+      <a class="forgot" href="#">Forgot Password?</a>
+    </div>
+  </div>
+</body>
+</html>

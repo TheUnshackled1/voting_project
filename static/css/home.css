@@ -1,6 +1,8 @@
 body{font-family:Inter,Arial,Helvetica,sans-serif;background:#0f1720;color:#fff;margin:0;padding:40px}
 .container{max-width:1100px;margin:0 auto}
 h1{letter-spacing:2px;text-align:center;margin-bottom:24px}
+.topbar{display:flex;justify-content:flex-end;margin-bottom:8px}
+.btn-logout{padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;border:1px solid rgba(255,255,255,0.06);text-decoration:none;font-weight:700}
 .cards{display:flex;gap:28px;justify-content:center}
 .card{width:45%;border-radius:12px;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));box-shadow:0 8px 30px rgba(0,0,0,0.6);position:relative}
 .card.red{background:linear-gradient(180deg,#b93e4a,#b14a4f)}
