@@ -39,18 +39,14 @@ def home(request):
             "name": "MICHAEL JORDAN",
             "votes": mj_votes,
             "percent": mj_percent,
-            "image": "images/mj.svg",
+            "image": "images/michael.png",
         },
         "lebron": {
             "name": "LEBRON JAMES",
             "votes": lebron_votes,
             "percent": lebron_percent,
-            "image": "images/lebron.svg",
+            "image": "images/lebron.png",
         },
-        "comments": [
-            {"user": "User123", "text": "MJ all way!"},
-            {"user": "Baller_Josh", "text": "Lefoon is king!"},
-        ],
         "voters": [{"name": v.voter_name, "candidate": v.candidate} for v in recent_votes],
         "has_voted": request.session.get("has_voted", False),
     }

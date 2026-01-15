@@ -14,7 +14,9 @@
     <div class="cards">
       <div class="card red">
         <div class="name">{{ mj.name }}</div>
-        <img class="candidate-img" src="{% static mj.image %}" alt="{{ mj.name }}">
+        <div class="img-wrap">
+          <img class="candidate-img" src="{% static mj.image %}" alt="{{ mj.name }}">
+        </div>
         <div class="votes">{{ mj.votes|intcomma }} <span class="small">({{ mj.percent }}%)</span></div>
         <form method="post" class="form-row">
           {% csrf_token %}
@@ -25,7 +27,9 @@
       </div>
       <div class="card blue">
         <div class="name">{{ lebron.name }}</div>
-        <img class="candidate-img" src="{% static lebron.image %}" alt="{{ lebron.name }}">
+        <div class="img-wrap">
+          <img class="candidate-img" src="{% static lebron.image %}" alt="{{ lebron.name }}">
+        </div>
         <div class="votes">{{ lebron.votes|intcomma }} <span class="small">({{ lebron.percent }}%)</span></div>
         <form method="post" class="form-row">
           {% csrf_token %}
@@ -58,24 +62,9 @@
       </div>
       <div class="panel">
         <h3>LIVE COMMENTS</h3>
-        {% if messages %}
-          <div class="messages">
-            {% for message in messages %}
-              <div class="message {{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-          </div>
-        {% endif %}
-        <div class="comments">
-          {% for c in comments %}
-            <div class="comment">
-              <div class="avatar"></div>
-              <div>
-                <div><strong>{{ c.user }}</strong></div>
-                <div class="small">{{ c.text }}</div>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
+
+        <!-- Live comments removed per request. Recent Voters retained below. -->
+
         <h4 style="margin-top:16px">Recent Voters</h4>
         <div class="comments">
           {% if voters %}

@@ -14,7 +14,12 @@ h1{letter-spacing:2px;text-align:center;margin-bottom:24px}
 .comment{display:flex;gap:12px;margin-bottom:10px}
 .avatar{width:36px;height:36px;border-radius:50%;background:#ddd}
 .small{font-size:13px;color:#cbd5e1}
-.candidate-img{width:100%;height:220px;object-fit:cover;border-radius:8px;margin-bottom:12px}
+.img-wrap{width:100%;border-radius:8px;overflow:hidden;margin-bottom:12px;aspect-ratio:16/9}
+.candidate-img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
+/* fallback for browsers without aspect-ratio support */
+@supports not (aspect-ratio: 1 / 1) {
+	.img-wrap{height:220px}
+}
 .form-row{display:flex;gap:8px;align-items:center;margin-top:8px}
 input[type="text"]{padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#fff}
 button[type="submit"]{padding:10px 14px;border-radius:20px;border:0;background:#ff6b6b;color:#fff}
