@@ -130,7 +130,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+# Additional static files directories (project-level)
+STATICFILES_DIRS = [BASE_DIR / "static"]  # you already have this
 
+# Where collectstatic will put files for production
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # Additional static files directory (for project-level static assets)
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
