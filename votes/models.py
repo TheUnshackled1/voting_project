@@ -8,6 +8,7 @@ class Vote(models.Model):
     ]
 
     voter_name = models.CharField(max_length=150)
+    voter_email = models.EmailField(max_length=254, blank=True, null=True)
     candidate = models.CharField(max_length=16, choices=CANDIDATE_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
 

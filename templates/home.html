@@ -15,6 +15,9 @@
         <a class="btn-logout" href="{% url 'logout' %}">Logout</a>
       {% endif %}
     </div>
+    {% if user.is_authenticated %}
+      <p class="welcome">Welcome, {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}!</p>
+    {% endif %}
     <h1>GOAT BASKETBALL PLAYER E-VOTE</h1>
     <div class="cards">
       <div class="card red">
@@ -25,8 +28,9 @@
         <div class="votes">{{ mj.votes|intcomma }} <span class="small">({{ mj.percent }}%)</span></div>
         <form method="post" class="form-row">
           {% csrf_token %}
-          <input type="hidden" name="candidate" value="mj">
-          <input type="text" name="voter_name" placeholder="Your name (optional)">
+          {% if not user.is_authenticated %}
+            <input type="email" name="voter_email" placeholder="Your email (optional)">
+          {% endif %}
           <button type="submit">VOTE NOW</button>
         </form>
       </div>
@@ -40,6 +44,9 @@
           {% csrf_token %}
           <input type="hidden" name="candidate" value="lebron">
           <input type="text" name="voter_name" placeholder="Your name (optional)">
+          {% if not user.is_authenticated %}
+            <input type="email" name="voter_email" placeholder="Your email (optional)">
+          {% endif %}
           <button type="submit" style="background:#3ea0ff">VOTE NOW</button>
         </form>
       </div>
@@ -78,7 +85,7 @@
                 <div class="avatar"></div>
                 <div>
                   <div><strong>{{ v.name }}</strong></div>
-                  <div class="small">voted for {{ v.candidate|upper }}</div>
+                  <div class="small">voted for {{ v.candidate|upper }}{% if v.email %} — <a class="email-link" href="mailto:{{ v.email }}">{{ v.email }}</a>{% endif %}</div>
                 </div>
               </div>
             {% endfor %}

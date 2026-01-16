@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
+    "django.contrib.sites",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
@@ -137,18 +139,24 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Required by django-allauth
+SITE_ID = 1
+
 # Redirect after successful login
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 # URL to redirect to for login_required decorator
 LOGIN_URL = "/login/"
 
+# Ensure social account logins redirect to site root
+SOCIALACCOUNT_LOGIN_REDIRECT_URL = "/"
+
 
 SOCIALACCOUNT_PROVIDERS = {
     'google':{
         'APP':{
-            'client_id': "",
-            'secret': '',
+            'client_id': "510458316439-ld2u73hgmfmqh2r4ncee3g5rishuqhpc.apps.googleusercontent.com",
+            'secret': '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',
         },
     'SCOPE': [ 'profile', 'email' ],
     'AUTH_PARAMS': { 'access_type': 'online' },
@@ -162,3 +170,5 @@ SOCIALACCOUNT_PROVIDERS = {
     },
     },
 }
+
+SOCIALACCOUNT_LOGIN_ON_GET=True

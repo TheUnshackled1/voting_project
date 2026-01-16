@@ -13,6 +13,11 @@ def home(request):
     if request.method == "POST":
         candidate = request.POST.get("candidate")
         voter_name = request.POST.get("voter_name", "").strip()
+        # capture email when the user is authenticated, or fallback to form value
+        if request.user.is_authenticated:
+            voter_email = request.user.email
+        else:
+            voter_email = request.POST.get("voter_email", "").strip()
 
         if candidate in ("mj", "lebron"):
             # allow anonymous votes when no name provided
@@ -20,7 +25,7 @@ def home(request):
                 voter_name = "Anonymous"
 
             # create Vote record
-            Vote.objects.create(voter_name=voter_name, candidate=candidate)
+            Vote.objects.create(voter_name=voter_name, voter_email=voter_email, candidate=candidate)
             request.session["has_voted"] = True
             messages.success(
                 request,
@@ -50,7 +55,7 @@ def home(request):
             "percent": lebron_percent,
             "image": "images/lebron.png",
         },
-        "voters": [{"name": v.voter_name, "candidate": v.candidate} for v in recent_votes],
+        "voters": [{"name": v.voter_name, "candidate": v.candidate, "email": v.voter_email} for v in recent_votes],
         "has_voted": request.session.get("has_voted", False),
     }
 

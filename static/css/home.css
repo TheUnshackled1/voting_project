@@ -23,7 +23,7 @@ h1{letter-spacing:2px;text-align:center;margin-bottom:24px}
 	.img-wrap{height:220px}
 }
 .form-row{display:flex;gap:8px;align-items:center;margin-top:8px}
-input[type="text"]{padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#fff}
+input[type="text"], input[type="email"]{padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#fff}
 button[type="submit"]{padding:10px 14px;border-radius:20px;border:0;background:#ff6b6b;color:#fff}
 button[disabled]{opacity:0.5}
 @media(max-width:900px){.cards{flex-direction:column}.card{width:100%}}
@@ -39,3 +39,6 @@ button[disabled]{opacity:0.5}
 .messages{margin:8px 0}
 .message{padding:8px;border-radius:6px;margin-bottom:6px}
 .message.success{background:rgba(34,197,94,0.12);color:#9ae6b4}
+
+/* Welcome banner */
+.welcome{display:block;text-align:center;font-size:18px;font-weight:700;letter-spacing:0.6px;margin:8px auto 14px;padding:10px 16px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));color:#fff;max-width:720px;box-shadow:0 8px 24px rgba(0,0,0,0.55)}
