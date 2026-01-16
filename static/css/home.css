@@ -15,6 +15,7 @@ h1{letter-spacing:2px;text-align:center;margin-bottom:24px}
 .comments{background:rgba(255,255,255,0.02);padding:18px;border-radius:8px}
 .comment{display:flex;gap:12px;margin-bottom:10px}
 .avatar{width:36px;height:36px;border-radius:50%;background:#ddd}
+.avatar img, .avatar-img{width:36px;height:36px;border-radius:50%;object-fit:cover;display:block}
 .small{font-size:13px;color:#cbd5e1}
 .img-wrap{width:100%;border-radius:8px;overflow:hidden;margin-bottom:12px;aspect-ratio:16/9}
 .candidate-img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
@@ -35,6 +36,8 @@ button[disabled]{opacity:0.5}
 .poll-bar-wrap{flex:1;background:rgba(255,255,255,0.03);height:18px;border-radius:10px;overflow:hidden}
 .poll-bar{height:100%;background:#e95656;border-radius:10px}
 .poll-bar.bar-blue{background:#3ea0ff}
+.poll-bar.bar-red{background:#e95656}
+.poll-bar.bar-yellow{background:#f6c744}
 .poll-value{width:110px;text-align:right;font-weight:700}
 .messages{margin:8px 0}
 .message{padding:8px;border-radius:6px;margin-bottom:6px}

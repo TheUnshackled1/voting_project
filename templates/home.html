@@ -28,6 +28,7 @@
         <div class="votes">{{ mj.votes|intcomma }} <span class="small">({{ mj.percent }}%)</span></div>
         <form method="post" class="form-row">
           {% csrf_token %}
+          <input type="hidden" name="candidate" value="mj">
           {% if not user.is_authenticated %}
             <input type="email" name="voter_email" placeholder="Your email (optional)">
           {% endif %}
@@ -43,7 +44,6 @@
         <form method="post" class="form-row">
           {% csrf_token %}
           <input type="hidden" name="candidate" value="lebron">
-          <input type="text" name="voter_name" placeholder="Your name (optional)">
           {% if not user.is_authenticated %}
             <input type="email" name="voter_email" placeholder="Your email (optional)">
           {% endif %}
@@ -59,14 +59,14 @@
           <div class="poll-row">
             <div class="poll-label">{{ mj.name }}</div>
             <div class="poll-bar-wrap">
-              <div class="poll-bar" style="width:{{ mj.percent }}%"></div>
+              <div class="poll-bar bar-red" style="width:{{ mj.percent }}%"></div>
             </div>
             <div class="poll-value">{{ mj.votes|intcomma }}</div>
           </div>
           <div class="poll-row">
             <div class="poll-label">{{ lebron.name }}</div>
             <div class="poll-bar-wrap">
-              <div class="poll-bar bar-blue" style="width:{{ lebron.percent }}%"></div>
+              <div class="poll-bar bar-yellow" style="width:{{ lebron.percent }}%"></div>
             </div>
             <div class="poll-value">{{ lebron.votes|intcomma }}</div>
           </div>
@@ -80,9 +80,13 @@
         <h4 style="margin-top:16px">Recent Voters</h4>
         <div class="comments">
           {% if voters %}
-            {% for v in voters|slice:":8" %}
+            {% for v in voters %}
               <div class="comment">
-                <div class="avatar"></div>
+                <div class="avatar">
+                  {% if v.avatar %}
+                    <img class="avatar-img" src="{{ v.avatar }}" alt="{{ v.name }}">
+                  {% endif %}
+                </div>
                 <div>
                   <div><strong>{{ v.name }}</strong></div>
                   <div class="small">voted for {{ v.candidate|upper }}{% if v.email %} — <a class="email-link" href="mailto:{{ v.email }}">{{ v.email }}</a>{% endif %}</div>
@@ -91,6 +95,17 @@
             {% endfor %}
           {% else %}
             <div class="small">No named voters yet.</div>
+          {% endif %}
+          {% if page_obj and page_obj.paginator.num_pages > 1 %}
+            <div class="pagination" style="margin-top:12px;display:flex;gap:8px;align-items:center;justify-content:center">
+              {% if page_obj.has_previous %}
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹ Prev</a>
+              {% endif %}
+              <span class="small">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+              {% if page_obj.has_next %}
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next ›</a>
+              {% endif %}
+            </div>
           {% endif %}
         </div>
       </div>

@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Vote
 import re
+from django.contrib.auth import get_user_model
+from allauth.socialaccount.models import SocialAccount
+from django.core.paginator import Paginator
 
 
 @login_required
@@ -53,7 +56,37 @@ def home(request):
     mj_percent = round(mj_votes * 100 / total)
     lebron_percent = 100 - mj_percent
 
-    recent_votes = Vote.objects.all()[:8]
+    recent_votes = Vote.objects.all()
+
+    # Paginate recent votes (5 per page)
+    paginator = Paginator(recent_votes, 5)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    recent_page_votes = page_obj.object_list
+
+    # Build voters context including avatar URL when available
+    User = get_user_model()
+    voters_context = []
+    for v in recent_page_votes:
+        avatar = None
+        email = (v.voter_email or "").strip()
+        if email:
+            user = User.objects.filter(email__iexact=email).first()
+            if user:
+                sa = SocialAccount.objects.filter(user=user).first()
+                if sa:
+                    # try SocialAccount helper first, fall back to extra_data
+                    try:
+                        avatar = sa.get_avatar_url()
+                    except Exception:
+                        avatar = sa.extra_data.get("picture") or sa.extra_data.get("avatar_url")
+
+        voters_context.append({
+            "name": v.voter_name,
+            "candidate": v.candidate,
+            "email": v.voter_email,
+            "avatar": avatar,
+        })
 
     context = {
         "mj": {
@@ -68,7 +101,8 @@ def home(request):
             "percent": lebron_percent,
             "image": "images/lebron.png",
         },
-        "voters": [{"name": v.voter_name, "candidate": v.candidate, "email": v.voter_email} for v in recent_votes],
+        "voters": voters_context,
+        "page_obj": page_obj,
         "has_voted": request.session.get("has_voted", False),
     }
 

@@ -153,13 +153,11 @@ SOCIALACCOUNT_LOGIN_REDIRECT_URL = "/"
 
 
 SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "APP": {
-            "client_id": config("GOOGLE_CLIENT_ID"),
-            "secret": config("GOOGLE_CLIENT_SECRET"),
-        }
-    }
-}
+    'google':{
+        'APP':{
+            'client_id': "510458316439-ld2u73hgmfmqh2r4ncee3g5rishuqhpc.apps.googleusercontent.com",
+            'secret': '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',
+        },
     'SCOPE': [ 'profile', 'email' ],
     'AUTH_PARAMS': { 'access_type': 'online' },
     'METHOD': 'oauth2',
