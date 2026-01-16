@@ -39,7 +39,17 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "votes",
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -49,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = "voting_project.urls"
@@ -131,3 +142,23 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 # URL to redirect to for login_required decorator
 LOGIN_URL = "/login/"
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google':{
+        'APP':{
+            'client_id': "",
+            'secret': '',
+        },
+    'SCOPE': [ 'profile', 'email' ],
+    'AUTH_PARAMS': { 'access_type': 'online' },
+    'METHOD': 'oauth2',
+    'VERIFIED_EMAIL': True,
+    },
+       'github':{
+        'APP':{
+            'client_id': "",
+            'secret': '',
+    },
+    },
+}

@@ -3,7 +3,7 @@ URL configuration for voting_project project.
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from votes import views as votes_views
 
 
@@ -12,4 +12,5 @@ urlpatterns = [
     path("login/", votes_views.login_view, name="login"),
     path("logout/", votes_views.logout_view, name="logout"),
     path("admin/", admin.site.urls),
+    path('accounts/', include('allauth.urls')),
 ]
