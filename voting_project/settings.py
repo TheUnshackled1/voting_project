@@ -165,10 +165,15 @@ SOCIALACCOUNT_PROVIDERS = {
     },
        'github':{
         'APP':{
-            'client_id': "",
-            'secret': '',
+            'client_id': "Ov23lipPx8iNLOUgHe7L",
+            'secret': 'ee0984d04074e3ea2d10e9d89a5361e3b930a763',
     },
     },
 }
 
 SOCIALACCOUNT_LOGIN_ON_GET=True
+
+# django-allauth: prefer email for authentication
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False

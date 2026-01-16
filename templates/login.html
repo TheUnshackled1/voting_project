@@ -9,18 +9,42 @@
   <link rel="stylesheet" href="{% static 'css/home.css' %}">
   <style>
     .login-wrap{max-width:420px;margin:48px auto;padding:36px;border-radius:12px;background:rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
-    .login-wrap h2{text-align:center;margin:0 0 18px;font-size:32px}
+    .login-wrap h1{
+      text-align:center;
+      margin:0 0 8px;
+      font-size:25px;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      background: linear-gradient(90deg,#FF6B6B,#FFD93D,#6BCB77,#4D96FF);
+      background-size:200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      text-shadow: 0 6px 24px rgba(0,0,0,0.45);
+      animation: shine 6s linear infinite;
+    }
+
+    @keyframes shine{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+    .login-wrap h2{text-align:center;margin:0 0 18px;font-size:22px}
     .login-row{display:block;margin-bottom:12px}
     input.login-input{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
     .login-actions{display:flex;gap:12px;align-items:center;margin-top:12px}
     .btn-primary{width:100%;padding:12px;border-radius:8px;background:#fff;color:#111;font-weight:700;border:0}
-    .btn-google{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;border:1px solid rgba(255,255,255,0.06)}
-    .btn-github{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;border:1px solid rgba(255,255,255,0.06)}
+    .btn-google{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;border:1px solid rgba(255,255,255,0.06);text-decoration:none}
+    .btn-google:hover{text-decoration:none}
+    .btn-github{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;border:1px solid rgba(255,255,255,0.06);text-decoration:none}
+    .btn-github:hover{text-decoration:none}
     .btn-github img{border-radius:50%;display:inline-block}
-    .socials{display:flex;gap:10px;justify-content:center;flex:1;flex-wrap:wrap}
-    .socials button{min-width:160px}
+    .socials{display:flex;flex-direction:column;gap:10px;align-items:center;width:100%}
+    .socials button,.socials a{width:100%;max-width:320px;min-width:0;display:flex;justify-content:center;align-items:center}
     @media(max-width:420px){
-      .socials button{width:100%;min-width:0}
+      .socials button,.socials a{width:100%;min-width:0}
     }
     .login-submit{margin-top:12px}
     .forgot{display:block;text-align:center;margin-top:12px;color:#cbd5e1}
@@ -29,7 +53,8 @@
 <body>
   <div class="container">
     <div class="login-wrap">
-      <h2>LOGIN</h2>
+      <h1>Tyrone E voting</h1>
+      <h2>LOGIN HERE!</h2>
 
       {% if messages %}
         {% for m in messages %}
@@ -37,32 +62,37 @@
         {% endfor %}
       {% endif %}
 
-      <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        <div class="login-row">
-          <input class="login-input" name="username" placeholder="Username" required>
+      <div class="login-actions">
+        <div class="socials">
+          <a id="github-login" class="btn-github" href="{% provider_login_url 'github' %}">
+            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GH" style="width:18px;height:18px"> Continue with GitHub
+          </a>
+          <a id="google-login" class="btn-google" href="{% provider_login_url 'google' %}">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G" style="width:20px;height:20px"> Continue with Google
+          </a>
         </div>
-        <div class="login-row">
-          <input class="login-input" name="password" type="password" placeholder="Password" required>
-        </div>
-
-        <div class="login-actions">
-          <div class="socials">
-            <button class="btn-github" type="button" onclick="window.location='#'">
-              <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GH" style="width:18px;height:18px"> Continue with GitHub
-            </button>
-            <a class="btn-google" href="{% provider_login_url 'google' %}">
-              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G" style="width:20px;height:20px"> Continue with Google
-            </a>
-          </div>
-        </div>
-        <div class="login-actions login-submit">
-          <button class="btn-primary" type="submit">LOGIN</button>
-        </div>
-      </form>
-
-      <a class="forgot" href="#">Forgot Password?</a>
+      </div>
     </div>
   </div>
+  <script>
+  document.addEventListener('DOMContentLoaded', function(){
+    var emailInput = document.getElementById('email-input');
+    var googleBtn = document.getElementById('google-login');
+    if(!googleBtn) return;
+    googleBtn.addEventListener('click', function(e){
+      var email = emailInput && emailInput.value ? emailInput.value.trim() : '';
+      var url = googleBtn.getAttribute('href') || googleBtn.href;
+      if(email){
+        // For Google OAuth, use login_hint so Google can prefill the account chooser
+        var param = 'login_hint=' + encodeURIComponent(email);
+        var sep = url.indexOf('?') === -1 ? '?' : '&';
+        url = url + sep + param;
+      }
+      // Navigate to the built URL
+      e.preventDefault();
+      window.location.href = url;
+    });
+  });
+  </script>
 </body>
 </html>
