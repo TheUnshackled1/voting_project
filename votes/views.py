@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import Vote
+import re
 
 
 @login_required
@@ -20,9 +21,21 @@ def home(request):
             voter_email = request.POST.get("voter_email", "").strip()
 
         if candidate in ("mj", "lebron"):
-            # allow anonymous votes when no name provided
+            # If the user didn't enter a name, use the authenticated user's name when available,
+            # otherwise fall back to "Anonymous" for unauthenticated voters.
             if not voter_name:
-                voter_name = "Anonymous"
+                if request.user.is_authenticated:
+                    voter_name = request.user.get_full_name() or request.user.username
+                else:
+                    # If anonymous but supplied an email, derive a display name from the
+                    # local-part of the email (e.g. 'mary.leianne' -> 'Mary Leianne').
+                    if voter_email:
+                        local = voter_email.split("@", 1)[0]
+                        # replace common separators with spaces and title-case words
+                        name = " ".join([p.capitalize() for p in re.split(r"[._\-]+", local) if p])
+                        voter_name = name or "Anonymous"
+                    else:
+                        voter_name = "Anonymous"
 
             # create Vote record
             Vote.objects.create(voter_name=voter_name, voter_email=voter_email, candidate=candidate)
