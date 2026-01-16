@@ -86,6 +86,7 @@ def home(request):
             "candidate": v.candidate,
             "email": v.voter_email,
             "avatar": avatar,
+            "created_at": v.created_at,
         })
 
     context = {

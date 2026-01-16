@@ -73,7 +73,6 @@
         </div>
       </div>
       <div class="panel">
-        <h3>LIVE COMMENTS</h3>
 
         <!-- Live comments removed per request. Recent Voters retained below. -->
 
@@ -89,7 +88,7 @@
                 </div>
                 <div>
                   <div><strong>{{ v.name }}</strong></div>
-                  <div class="small">voted for {{ v.candidate|upper }}{% if v.email %} — <a class="email-link" href="mailto:{{ v.email }}">{{ v.email }}</a>{% endif %}</div>
+                  <div class="small">voted for {{ v.candidate|upper }}{% if v.email %} — <a class="email-link" href="mailto:{{ v.email }}">{{ v.email }}</a>{% endif %}{% if v.created_at %} — <span class="time">{{ v.created_at|naturaltime }}</span>{% endif %}</div>
                 </div>
               </div>
             {% endfor %}
