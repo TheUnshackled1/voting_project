@@ -20,6 +20,10 @@ def home(request):
         # capture email when the user is authenticated, or fallback to form value
         if request.user.is_authenticated:
             voter_email = request.user.email
+            # Check if this authenticated user has already voted
+            if Vote.objects.filter(voter_email__iexact=voter_email).exists():
+                messages.error(request, "You have already voted. Only one vote per account is allowed.")
+                return redirect(reverse("home"))
         else:
             voter_email = request.POST.get("voter_email", "").strip()
 
