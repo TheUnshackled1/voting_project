@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-&kag@+rc7t0+m7y%h%2_epg^q3^-_0aplop@n)%=j$s(#2vb+3"
+# Generate a new key: python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-&kag@+rc7t0+m7y%h%2_epg^q3^-_0aplop@n)%=j$s(#2vb+3')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = []
+# PythonAnywhere: Add your username.pythonanywhere.com
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 
 # Application definition
@@ -55,6 +58,7 @@ AUTHENTICATION_BACKENDS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Serve static files in production
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -138,6 +142,16 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # Additional static files directory (for project-level static assets)
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
+# WhiteNoise storage for compressed/cached static files in production
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+}
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -177,7 +191,29 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
-# django-allauth: prefer email for authentication
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
+# django-allauth: prefer email for authentication (updated from deprecated settings)
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+
+# =============================================================================
+# SECURITY SETTINGS FOR PRODUCTION (PythonAnywhere)
+# =============================================================================
+
+# Only apply strict security settings when in production (DEBUG=False)
+if not DEBUG:
+    # HTTPS/SSL Settings
+    SECURE_SSL_REDIRECT = True  # Redirect all HTTP to HTTPS
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Trust proxy headers
+    
+    # HTTP Strict Transport Security (HSTS)
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # Secure Cookies
+    SESSION_COOKIE_SECURE = True  # Only send session cookie over HTTPS
+    CSRF_COOKIE_SECURE = True  # Only send CSRF cookie over HTTPS
+    
+    # Additional Security Headers
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
